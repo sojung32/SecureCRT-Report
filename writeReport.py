@@ -100,19 +100,26 @@ def excuteCommand(sheet, index):
 				if c.find("Model"):
 					regex = re.compile("Model Number|Model number")
 					if regex.search(result):
-						cell = sheet.cell(dataRow+index, 1, result.split(':')[-1].strip())
+						data = result.split(':')[-1].strip()
+						if data is None or data == '':
+							data = 'unknown'
+						cell = sheet.cell(dataRow+index, 1, data)
 						setCellStyleDefault(cell)
 				# hostname
 				if c.find("Hostname"):
 					regex = re.compile("hostname|Hostname")
 					if regex.search(result):
 						hostname = result.split()[-1].strip()
+						if hostname is None or hostname == '':
+							hostname = 'unknown'
 						cell = sheet.cell(dataRow+index, 2, hostname)
 						setCellStyleDefault(cell)
 				# version
 				if c.find("Version") and bContinue:
 					if result.find("Version") > -1:
 						version = result.split('Version')[-1].split(",")[0].strip()
+						if version is None or version == '':
+							version = 'unknown'
 						cell = sheet.cell(dataRow+index, 3, version)
 						setCellStyleDefault(cell)
 						bContinue = False
@@ -123,12 +130,17 @@ def excuteCommand(sheet, index):
 						uptime = result.split("is")[-1]
 						if uptime.find("minutes"):
 							uptime = uptime[0:uptime.rfind(',')]
+						if uptime is None or uptime == '':
+							uptime = 'unknown'
 						cell = sheet.cell(dataRow+index, 4, uptime)
 						setCellStyleDefault(cell)
 				# cpu
 				if c.find("CPU") and bContinue:
 					if result.find("CPU") > -1:
-						cell = sheet.cell(dataRow+index, 5, result.split('five minutes:')[-1].strip())
+						data = result.split('five minutes:')[-1].strip()
+						if data is None or data == '':
+							data = 'unknown'
+						cell = sheet.cell(dataRow+index, 5, data)
 						setCellStyleDefault(cell)
 						bContinue = False
 				# memory
@@ -136,8 +148,12 @@ def excuteCommand(sheet, index):
 					if result.find("Processor") > -1:
 						total = result.split("Total:")[-1].split("Used:")[0].strip()
 						used = result.split("Used:")[-1].split("Free:")[0].strip()
+						if total is None or total == '':
+							total = 'unknown'
 						cell = sheet.cell(dataRow+index, 6, total)
 						setCellStyleDefault(cell)
+						if used is None or used == '':
+							used = 'unknown'
 						cell = sheet.cell(dataRow+index, 7, used)
 						setCellStyleDefault(cell)
 						bContinue = False
@@ -145,24 +161,39 @@ def excuteCommand(sheet, index):
 				if c.find("total"):
 					if result.find("total") > -1:
 						flash = result.split("total")
-						cell = sheet.cell(dataRow+index, 8, flash[0].split()[0].strip())
+						total = flash[0].split()[0].strip()
+						if total is None or total == '':
+							total = 'unknown'
+						cell = sheet.cell(dataRow+index, 8, total)
 						setCellStyleDefault(cell)
-						cell = sheet.cell(dataRow+index, 9, re.sub("[\\(|\\)]", "", flash[1]).split()[0].strip())
+						free = re.sub("[\\(|\\)]", "", flash[1]).split()[0].strip()
+						if free is None or free == '':
+							free = 'unknown'
+						cell = sheet.cell(dataRow+index, 9, free)
 						setCellStyleDefault(cell)
 				# env(temp, power, fan)
 				if c.find("env"):
 					#temp
 					if result.find("Temperature Value") > -1:
-						cell = sheet.cell(dataRow+index, 10, re.sub("[^0-9]", "", result).strip())
+						data = re.sub("[^0-9]", "", result).strip()
+						if data is None or data == '':
+							data = 'unknown'
+						cell = sheet.cell(dataRow+index, 10, data)
 						setCellStyleDefault(cell)
 					#power
 					if result.find("Built-in") > -1:
-						cell = sheet.cell(dataRow+index, 11, result.split()[-1].strip())
+						data = result.split()[-1].strip()
+						if data is None or data == '':
+							data = 'unknown'
+						cell = sheet.cell(dataRow+index, 11, data)
 						setCellStyleDefault(cell)
 					# fan
 					regex = re.compile("Fan|FAN")
 					if regex.search(result):
-						cell = sheet.cell(dataRow+index, 12, result.split("is")[-1].strip())
+						data = result.split("is")[-1].strip()
+						if data is None or data == '':
+							data = 'unknown'
+						cell = sheet.cell(dataRow+index, 12, data)
 						setCellStyleDefault(cell)
 
 		# Clear Screen
