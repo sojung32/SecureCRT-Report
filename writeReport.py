@@ -349,56 +349,58 @@ global savePath # information excel file path
 
 selectFile = getExcel()
 infoFrame = getInformation(selectFile)
-savePath = os.path.dirname(os.path.abspath(selectFile)) + "\\"
 
-resultExcel = Workbook()
-sheet = resultExcel.active
-prepareExcel(sheet)
+if infoFrame:
+	savePath = os.path.dirname(os.path.abspath(selectFile)) + "\\"
 
-for index in range(infoFrame.shape[0]):
+	resultExcel = Workbook()
+	sheet = resultExcel.active
+	prepareExcel(sheet)
 
-	# SSH2 connection
-	host = infoFrame['host'][index]
-	port = infoFrame['port'][index]
-	user = infoFrame['username'][index]
-	pswd = infoFrame['password'][index]
+	for index in range(infoFrame.shape[0]):
 
-	connectSSH2(host, port, user, pswd)
+		# SSH2 connection
+		host = infoFrame['host'][index]
+		port = infoFrame['port'][index]
+		user = infoFrame['username'][index]
+		pswd = infoFrame['password'][index]
 
-	# Connection Succeed
-	if crt.Session.Connected:
+		connectSSH2(host, port, user, pswd)
 
-		crt.Screen.Send("en\r")
-		crt.Screen.Send(pswd + "\r")
-		crt.Screen.Send("terminal length 0\r")
-		
-		crt.Screen.Clear()
-		crt.Screen.WaitForCursor(1)
+		# Connection Succeed
+		if crt.Session.Connected:
 
-		excuteCommand(sheet, index)
+			crt.Screen.Send("en\r")
+			crt.Screen.Send(pswd + "\r")
+			crt.Screen.Send("terminal length 0\r")
+			
+			crt.Screen.Clear()
+			crt.Screen.WaitForCursor(1)
 
-		crt.Session.Disconnect()
+			excuteCommand(sheet, index)
 
-# Add Date
-today = datetime.now()
-strDate = 'Date : ' + today.strftime('%Y-%m-%d %H:%M:%S')
-cellDate = sheet.cell(row=2, column=1, value=strDate)
+			crt.Session.Disconnect()
 
-# Save Result Excel
-try:
-	saveFile = crt.Dialog.FileSaveDialog(title="Save As", 
-									filter="Excel Files (*.xlsx)|*.xlsx||", 
-									defaultFilename="report.xlsx")
-except:
-	saveFile = savePath + "report_" + today.strftime('%Y%m%d%H%M%S') + ".xlsx"
-finally:
+	# Add Date
+	today = datetime.now()
+	strDate = 'Date : ' + today.strftime('%Y-%m-%d %H:%M:%S')
+	cellDate = sheet.cell(row=2, column=1, value=strDate)
 
-	if saveFile is None or saveFile == '':
+	# Save Result Excel
+	try:
+		saveFile = crt.Dialog.FileSaveDialog(title="Save As", 
+										filter="Excel Files (*.xlsx)|*.xlsx||", 
+										defaultFilename="report.xlsx")
+	except:
 		saveFile = savePath + "report_" + today.strftime('%Y%m%d%H%M%S') + ".xlsx"
-	elif saveFile.find(".") > -1:
-		saveFile = saveFile[0:saveFile.find(".")] + ".xlsx"
-	else :
-		saveFile = saveFile + ".xlsx"
+	finally:
 
-	resultExcel.save(saveFile)
-	crt.Dialog.MessageBox("Complete writing Report", "Complete", ICON_INFO)
+		if saveFile is None or saveFile == '':
+			saveFile = savePath + "report_" + today.strftime('%Y%m%d%H%M%S') + ".xlsx"
+		elif saveFile.find(".") > -1:
+			saveFile = saveFile[0:saveFile.find(".")] + ".xlsx"
+		else :
+			saveFile = saveFile + ".xlsx"
+
+		resultExcel.save(saveFile)
+		crt.Dialog.MessageBox("Complete writing Report", "Complete", ICON_INFO)
