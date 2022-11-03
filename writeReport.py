@@ -7,10 +7,11 @@
 ## Import Cisco devices information from Excel
 ## Connect to server using SSH2 protocol
 ## Excute a specific Commands
+## Get Result and Edit Data
 ## Then Write down Prompt to an Excel and Text File
 #
 # Required 
-## SecureCRT version 9.x.x or later
+## SecureCRT version 9.0 or later
 ## Python3 (3.9.13 recommended)
 ## pandas and openpyxl Required
 ## The Excel File containing host port username password
@@ -53,7 +54,7 @@ def connectSSH2(host, port, username, password):
 
 
 ### Excute Commands
-### Get Command Results
+### Get Command Results and Edit Data
 ### Set Data to Excel and Save Text File
 def excuteCommand(sheet, index):
 	# Command Array
