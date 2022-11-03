@@ -127,9 +127,9 @@ def excuteCommand(sheet, index):
 				if c.find("Uptime"):
 					regex = re.compile("Uptime|uptime")
 					if regex.search(result):
-						uptime = result.split("is")[-1]
+						uptime = result.split("is")[-1].strip()
 						if uptime.find("minutes"):
-							uptime = uptime[0:uptime.rfind(',')]
+							uptime = uptime[0:uptime.rfind(',')].strip()
 						if uptime is None or uptime == '':
 							uptime = 'unknown'
 						cell = sheet.cell(dataRow+index, 4, uptime)
